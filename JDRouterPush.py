@@ -83,15 +83,18 @@ def routerActivityInfo(mac):
         res_json = res.json()
         result = res_json["result"]
         # finishActivity = result["finishActivity"]
-        totalIncomeValue = result["routerUnderwayResult"]["totalIncomeValue"]
-        satisfiedTimes = result["routerUnderwayResult"]["satisfiedTimes"]
-        activity_info = {"mac": mac, "totalIncomeValue": totalIncomeValue, "satisfiedTimes": satisfiedTimes}
-        index = GlobalVariable.findALocation(mac)
-        if index != -1:
-            point_info = GlobalVariable.final_result["pointInfos"][index]
-            point_info.update(activity_info)
-    else:
-        print("Request routerActivityInfo failed!")
+        if result["routerUnderwayResult"] is None:
+            exit
+        else:
+            totalIncomeValue = result["routerUnderwayResult"]["totalIncomeValue"]
+            satisfiedTimes = result["routerUnderwayResult"]["satisfiedTimes"]
+            activity_info = {"mac": mac, "totalIncomeValue": totalIncomeValue, "satisfiedTimes": satisfiedTimes}
+            index = GlobalVariable.findALocation(mac)
+            if index != -1:
+                point_info = GlobalVariable.final_result["pointInfos"][index]
+                point_info.update(activity_info)
+            else:
+                print("Request routerActivityInfo failed!")
 
 
 # 收益信息
@@ -399,4 +402,3 @@ def runTest(i):
 # 读取配置文件
 if __name__ == '__main__':
     runTest(0)
-
